@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ toLowerCase(github.repository) }}/webapp
+  IMAGE_NAME: ${{ github.repository }}/webapp
 
 jobs:
   lint:
@@ -44,6 +44,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Convert IMAGE_NAME to lowercase (GitHub Actions has no lowercase function)
+      - name: Normalize image name to lowercase
+        run: echo "IMAGE_NAME=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
